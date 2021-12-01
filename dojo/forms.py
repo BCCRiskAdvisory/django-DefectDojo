@@ -210,7 +210,7 @@ class Product_TypeProductForm(forms.ModelForm):
 
 class ImportScanForm(forms.Form):
     SCAN_TYPE_CHOICES = (("Burp Scan", "Burp Scan"), ("Nessus Scan", "Nessus Scan"), ("Nexpose Scan", "Nexpose Scan"),
-                         ("Veracode Scan", "Veracode Scan"), ("ZAP Scan", "ZAP Scan"))
+                         ("Veracode Scan", "Veracode Scan"), ("ZAP Scan", "ZAP Scan"), ("Edgescan Scan", "Edgescan Scan"))
     scan_date = forms.DateTimeField(
         required=True,
         label="Scan Completion Date",
@@ -222,7 +222,7 @@ class ImportScanForm(forms.Form):
                                          choices=SEVERITY_CHOICES[0:4])
     scan_type = forms.ChoiceField(required=True, choices=SCAN_TYPE_CHOICES)
     file = forms.FileField(widget=forms.widgets.FileInput(
-        attrs={"accept": ".xml, .csv, .nessus"}),
+        attrs={"accept": ".xml, .csv, .nessus, .json"}),
         label="Choose report file",
         required=True)
 
@@ -245,7 +245,7 @@ class ReImportScanForm(forms.Form):
                                          required=True,
                                          choices=SEVERITY_CHOICES[0:4])
     file = forms.FileField(widget=forms.widgets.FileInput(
-        attrs={"accept": ".xml, .csv, .nessus"}),
+        attrs={"accept": ".xml, .csv, .nessus, .json"}),
         label="Choose report file",
         required=True)
 
