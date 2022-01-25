@@ -81,7 +81,7 @@ def endpoint_from_uri(test, uri):
     port = "80"
     if url.scheme == 'https':
         port = "443"
-    if rhost.group(11) is not None:
+    if rhost and rhost.group(11) is not None:
         port = str(rhost.group(11))
 
     try:
