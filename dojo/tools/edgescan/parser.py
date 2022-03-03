@@ -47,13 +47,14 @@ def make_finding(test, vulnerability):
     # finding.impact = 
     # finding.references = 
     finding.is_template = False
-    finding.active = True
+    finding.active = False if vulnerability["status"] == "closed" else True
     finding.verified = True
     finding.false_p = False
     finding.duplicate = False
     finding.out_of_scope = False
     # finding.thread_id = 
-    # finding.mitigated = 
+    if vulnerability["status"] == "closed":
+        finding.mitigated = vulnerability["date_closed"][:10]
     # finding.mitigated_by = 
     # finding.reporter = 
     # finding.notes = 
