@@ -93,7 +93,7 @@ class DefaultReImporter(BaseImporter, DefaultReImporterOptions):
         parser = self.get_parser()
         # Get the findings from the parser based on what methods the parser supplies
         # This could either mean traditional file parsing, or API pull parsing
-        parsed_findings = self.parse_findings(scan, parser)
+        parsed_findings = self.parse_findings(scan, parser) or []
         # process the findings in the foreground or background
         (
             new_findings,
@@ -170,7 +170,11 @@ class DefaultReImporter(BaseImporter, DefaultReImporterOptions):
         # we need to make sure there are no side effects such as closing findings
         # for findings with a different service value
         # https://github.com/DefectDojo/django-DefectDojo/issues/12754
-        original_findings = self.test.finding_set.all().filter(service=self.service)
+        if self.service is not None:
+            original_findings = self.test.finding_set.all().filter(service=self.service)
+        else:
+            original_findings = self.test.finding_set.all().filter(Q(service__isnull=True) | Q(service__exact=""))
+
         logger.debug(f"original_findings_qyer: {original_findings.query}")
         self.original_items = list(original_findings)
         logger.debug(f"original_items: {[(item.id, item.hash_code) for item in self.original_items]}")
@@ -689,8 +693,12 @@ class DefaultReImporter(BaseImporter, DefaultReImporterOptions):
         if len(self.endpoints_to_add) > 0:
             self.endpoint_manager.chunk_endpoints_and_disperse(finding, self.endpoints_to_add)
         # Parsers must use unsaved_tags to store tags, so we can clean them
-        if finding.unsaved_tags:
-            finding.tags = clean_tags(finding.unsaved_tags)
+        if finding_from_report.unsaved_tags:
+            cleaned_tags = clean_tags(finding_from_report.unsaved_tags)
+            if isinstance(cleaned_tags, list):
+                finding.tags.set(cleaned_tags)
+            elif isinstance(cleaned_tags, str):
+                finding.tags.set([cleaned_tags])
         # Process any files
         if finding_from_report.unsaved_files:
             finding.unsaved_files = finding_from_report.unsaved_files

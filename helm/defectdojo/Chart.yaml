@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: "2.51.2"
+appVersion: "2.52.1"
 description: A Helm chart for Kubernetes to install DefectDojo
 name: defectdojo
-version: 1.7.2
+version: 1.8.1
 icon: https://defectdojo.com/hubfs/DefectDojo_favicon.png
 maintainers:
   - name: madchap
@@ -36,8 +36,8 @@ annotations:
   artifacthub.io/prerelease: "false"
   artifacthub.io/changes: |
     - kind: fixed
-      description: Drop initialDelaySeconds if eq. zero
-    - kind: added
-      description: Add support for automountServiceAccountToken
+      description: Broken rendering of media PVC
+    - kind: fixed
+      description: Typo in description of digests
     - kind: changed
-      description: Bump DefectDojo to 2.51.2
+      description: Bump DefectDojo to 2.52.1
