@@ -4,8 +4,10 @@ from json.decoder import JSONDecodeError
 import requests
 from django.conf import settings
 
+from dojo.tools.api_edgescan.edgescan_api_additional_endpoints import EdgescanAPIAdditionalEndpoints
 
-class EdgescanAPI:
+
+class EdgescanAPI(EdgescanAPIAdditionalEndpoints):
 
     """A simple client for the Edgescan API"""
 

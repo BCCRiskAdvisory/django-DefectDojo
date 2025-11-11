@@ -49,6 +49,7 @@ from dojo.filters import (
     TestImportFilter,
     TestImportFindingActionFilter,
 )
+from dojo.finding.edgescan_utils import trigger_vulnerability_retest
 from dojo.finding.queries import get_authorized_findings, prefetch_for_findings
 from dojo.forms import (
     ApplyFindingTemplateForm,
@@ -1589,6 +1590,17 @@ def request_finding_review(request, fid):
         "dojo/review_finding.html",
         {"finding": finding, "product_tab": product_tab, "user": user, "form": form, "enable_table_filtering": get_system_setting("enable_ui_table_based_searching")},
     )
+
+
+@user_is_authorized(Finding, Permissions.Finding_Edit, "fid")
+def request_vlnerability_retest(request, fid):
+    # Minimal view: calls service to perform vulnerability retest
+    if request.method != "GET":
+        return JsonResponse({"error": "Invalid request"}, status=400)
+    try:
+        return JsonResponse(trigger_vulnerability_retest(fid))
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
 
 @user_is_authorized(Finding, Permissions.Finding_Edit, "fid")

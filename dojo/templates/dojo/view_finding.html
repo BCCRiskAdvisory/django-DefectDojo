@@ -913,6 +913,8 @@
             </div>
             <div id="vuln_desc" class="panel-body finding-description collapse in">
               <pre>{{ finding.description|markdown_render|default_if_none:"" }}</pre>
+              <!-- Display the link to retest vulnerability here along with the vulnerability description -->
+              {% include "dojo/snippets/edgescan_magic_retest_vulnerability_link.html" with finding=finding %}
             </div>
         </div>
 
